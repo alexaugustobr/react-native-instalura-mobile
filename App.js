@@ -1,52 +1,70 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  Dimensions,
+	SafeAreaView,
+	FlatList,
+	StyleSheet,
+	Image,
+	ScrollView,
+	View,
+	Text,
+	StatusBar,
+	Dimensions,
 } from 'react-native';
 
-const width = Dimensions.get('screen').width;
+import Post from './src/components/Post';
+
+const screenWidth = Dimensions.get('screen').width;
 
 const fotos = [
-  {
-    id: 1,
-    usuario: 'Daniel'
-  },
-  {
-    id: 2,
-    usuario: 'Bob'
-  },
-  {
-    id: 3,
-    usuario: 'Im okay'
-  }
+	{
+		id: '1',
+		usuario: 'Daniel'
+	},
+	{
+		id: '2',
+		usuario: 'Bob'
+	},
+	{
+		id: '3',
+		usuario: 'Im okay'
+	}
 ]
 
+const styles = StyleSheet.create(
+	{
+		container: {
+			marginTop: 20
+		},
+		cabecalho: {
+			margin:10, 
+			flexDirection: 'row', 
+			alignItems: 'center'
+		}, 
+		fotoPerfil: {
+			marginRight:10, 
+			borderRadius: 20,
+			width: 40, 
+			height: 40
+		},
+		foto: {
+			width: screenWidth,
+			height: screenWidth
+		}
+	}
+);
+
 const App: () => React$Node = () => {
-  return (
-    <View style={{marginTop:20}}>
-      {fotos.map(foto =>
-        <View key={foto.id}>
-          <Text>{foto.usuario}</Text> 
-          <Image source={require('./resources/img/alura.jpg')} 
-                 style={{width: width, height: width}}/>
-        </View>
-      )}
-    </View>
-  );
+	return (
+		<SafeAreaView>
+			<FlatList style={styles.container}
+								data={fotos} 
+								keyExtractor={item => item.id}
+								renderItem={ ({item}) =>
+					<Post foto={item}/>
+				}
+			/>
+		</SafeAreaView> 
+	);
 };
 
 export default App;
