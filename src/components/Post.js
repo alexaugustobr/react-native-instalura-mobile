@@ -58,9 +58,9 @@ export default class Post extends Component {
 	}
 
 	carregaIcone(likeada) {
-		return likeada ? require('../../resources/img/s2-check.png')
-					   : require('../../resources/img/s2.png')
-	}
+		return likeada ? require('../../resources/img/s2-checked.png') :
+			require('../../resources/img/s2.png')
+	  }
 
 	like() {
 		const { foto } = this.state; 
@@ -91,7 +91,7 @@ export default class Post extends Component {
 
 		return (
 			<Text style={styles.likes}>
-				{foto.likers.length} {foto.likers.length > 1 ? 'curtidas' : 'curtida'}
+				{likers.length} {likers.length > 1 ? 'curtidas' : 'curtida'}
 			</Text>
 		);
 	}

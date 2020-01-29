@@ -47,7 +47,7 @@ export default class App extends Component {
 			<SafeAreaView>
 				<FlatList style={styles.container}
 						  data={this.state.fotos} 
-					  	  keyExtractor={item => item.id}
+					  	  keyExtractor={item => 'item-'+item.id}
 						  renderItem={this.renderPost}
 				/>
 			</SafeAreaView> 
