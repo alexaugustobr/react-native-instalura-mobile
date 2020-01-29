@@ -6,6 +6,7 @@ import {
 	Text,
 	Dimensions,
 	TouchableOpacity,
+	TextInput,
 } from 'react-native';
 
 const screenWidth = Dimensions.get('screen').width;
@@ -43,8 +44,22 @@ const styles = StyleSheet.create(
 		},
 		tituloComentario: {
 			fontWeight: 'bold',
-			marginRight: 5,
+			marginRight: 5
+		}, 
+		novoComentario: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			borderBottomWidth: 1,
+			borderBottomColor: '#ddd',
 		},
+		input: {
+			flex: 1,
+			height: 40,
+		},
+		icone: {
+			height: 30,
+			width: 30,
+		},  
 	}
 );
 
@@ -55,6 +70,25 @@ export default class Post extends Component {
 		this.state = {
 			foto: this.props.foto
 		}
+	}
+
+	adicionaComentario() {
+		if(this.state.valorComentario === '')
+			return;
+
+		const novaLista = [...this.state.foto.comentarios, {
+			id: this.state.valorComentario,
+			login: 'meuUsuario',
+			texto: this.state.valorComentario,
+		}];
+
+		const fotoAtualizada = {
+			...this.state.foto,
+			comentarios: novaLista,
+		}
+
+		this.setState({foto: fotoAtualizada, valorComentario: ''});
+		this.inputComentario.clear();
 	}
 
 	carregaIcone(likeada) {
@@ -133,6 +167,17 @@ export default class Post extends Component {
 								<Text>{comentario.texto}</Text>
 							</View>
 						)}
+						<View style={styles.novoComentario}>
+							<TextInput style={styles.input}
+								placeholder="Adicione um comentário..."
+								ref={input => this.inputComentario = input}
+								onChangeText={texto => this.setState({valorComentario: texto})}/>
+
+							<TouchableOpacity onPress={this.adicionaComentario.bind(this)}>
+								<Image style={styles.icone}
+									   source={require('../../resources/img/send.png')} />
+							</TouchableOpacity>
+						</View>
 					</TouchableOpacity>
 				</View>
             </View>
