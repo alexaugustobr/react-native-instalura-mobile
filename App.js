@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
 	SafeAreaView,
 	FlatList,
@@ -15,56 +15,42 @@ import Post from './src/components/Post';
 
 const screenWidth = Dimensions.get('screen').width;
 
-const fotos = [
-	{
-		id: '1',
-		usuario: 'Daniel'
-	},
-	{
-		id: '2',
-		usuario: 'Bob'
-	},
-	{
-		id: '3',
-		usuario: 'Im okay'
-	}
-]
-
 const styles = StyleSheet.create(
 	{
 		container: {
 			marginTop: 20
-		},
-		cabecalho: {
-			margin:10, 
-			flexDirection: 'row', 
-			alignItems: 'center'
-		}, 
-		fotoPerfil: {
-			marginRight:10, 
-			borderRadius: 20,
-			width: 40, 
-			height: 40
-		},
-		foto: {
-			width: screenWidth,
-			height: screenWidth
 		}
 	}
 );
 
-const App: () => React$Node = () => {
-	return (
-		<SafeAreaView>
-			<FlatList style={styles.container}
-								data={fotos} 
-								keyExtractor={item => item.id}
-								renderItem={ ({item}) =>
-					<Post foto={item}/>
-				}
-			/>
-		</SafeAreaView> 
-	);
-};
 
-export default App;
+
+export default class App extends Component {
+
+	constructor() {
+		super();
+		this.state = {
+			fotos: []
+		}
+	}
+
+	componentDidMount() {
+		fetch('https://instalura-api.herokuapp.com/api/public/fotos/rafael')
+			.then(resposta => resposta.json())
+			.then(json => this.setState({fotos: json}))
+	}
+
+	renderPost = ({item}) => (<Post foto={item}/>);
+
+	render() {
+		return (
+			<SafeAreaView>
+				<FlatList style={styles.container}
+						  data={this.state.fotos} 
+					  	  keyExtractor={item => item.id}
+						  renderItem={this.renderPost}
+				/>
+			</SafeAreaView> 
+		);
+	}
+}

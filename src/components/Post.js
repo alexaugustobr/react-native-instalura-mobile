@@ -5,15 +5,13 @@ import {
 	View,
 	Text,
 	Dimensions,
+	TouchableOpacity,
 } from 'react-native';
 
 const screenWidth = Dimensions.get('screen').width;
 
 const styles = StyleSheet.create(
 	{
-		container: {
-			marginTop: 20
-		},
 		cabecalho: {
 			margin:10, 
 			flexDirection: 'row', 
@@ -28,21 +26,60 @@ const styles = StyleSheet.create(
 		foto: {
 			width: screenWidth,
 			height: screenWidth
+		},
+		botaoLike: {
+			height: 40,
+			width: 40
+		},
+		rodape: {
+			margin: 10
 		}
 	}
 );
 
 export default class Post extends Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {
+			foto: this.props.foto
+		}
+	}
+
+	carregaIcone(likeada) {
+		return likeada ? require('../../resources/img/s2-check.png')
+					   : require('../../resources/img/s2.png')
+	}
+
+	like(){
+		const fotoAtualizada = {
+			...this.state.foto, 
+			likeada: !this.state.foto.likeada
+		}
+		this.setState({
+			foto: fotoAtualizada
+		})
+	}
+
 	render() {
+		const { foto } = this.state;
+
         return (
             <View>
                 <View style={styles.cabecalho}>
-                    <Image source={require('../../resources/img/alura.jpg')} 
+                    <Image source={{uri: foto.urlPerfil}} 
                            style={styles.fotoPerfil}/>
-                    <Text>{this.props.foto.usuario}</Text> 
+                    <Text>{foto.loginUsuario}</Text> 
                 </View>
-                <Image source={require('../../resources/img/alura.jpg')} 
+                <Image source={{uri: foto.urlFoto}} 
                        style={styles.foto}/>
+				
+				<View style={styles.rodape}>
+					<TouchableOpacity onPress={this.like.bind(this)}>
+						<Image style={styles.botaoLike} 
+							source={this.carregaIcone(foto.likeada)}/>
+					</TouchableOpacity>
+				</View>
             </View>
         );
     }
